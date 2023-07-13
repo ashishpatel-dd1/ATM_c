@@ -17,7 +17,6 @@ void generateUniqueNumbers(CUSTOMER* customer) {
 void addAccount() {
 
     CUSTOMER* customer = malloc(sizeof(CUSTOMER));
-
     printf("-------------------------------\n");
 
     
@@ -29,10 +28,10 @@ void addAccount() {
     customer->fullName[strcspn(customer->fullName, "\n")] = '\0';
 
     // Validate Full Name
-    if (customer->fullName[0] == '\0' || !validateAlphabetsOnly(customer->fullName)) {
-        printf("Invalid Full Name. Please enter alphabets only.\n");
-        free(customer);
-        return;
+    while (customer->fullName[0] == '\0' || !validateAlphabetsOnly(customer->fullName)) {
+        printf("Invalid Full Name.\nPlease enter a valid Full Name: ");
+        fgets(customer->fullName, 50, stdin);
+        customer->fullName[strcspn(customer->fullName, "\n")] = '\0';
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------//
@@ -44,10 +43,10 @@ void addAccount() {
     customer->fathersName[strcspn(customer->fathersName, "\n")] = '\0';
 
     // Validate Father's Name
-    if (customer->fathersName[0] == '\0' || !validateAlphabetsOnly(customer->fathersName)) {
-        printf("Invalid. Please enter alphabets only.\n");
-        free(customer);
-        return;
+    while (customer->fathersName[0] == '\0' || !validateAlphabetsOnly(customer->fathersName)) {
+        printf("Invalid.\nPlease enter a valid Name: ");
+        fgets(customer->fathersName, 50, stdin);
+        customer->fathersName[strcspn(customer->fathersName, "\n")] = '\0';
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------//
@@ -59,10 +58,10 @@ void addAccount() {
     customer->dob[strcspn(customer->dob, "\n")] = '\0';
 
     // Validate DOB
-    if (customer->dob[0] == '\0' || !validateDateOfBirth(customer->dob)) {
-        printf("Invalid Date of Birth. Please enter in the format DD/MM/YYYY.\n");
-        free(customer);
-        return;
+    while (customer->dob[0] == '\0' || !validateDateOfBirth(customer->dob)) {
+        printf("Invalid Date of Birth.\nPlease enter in the format [DD/MM/YYYY]: ");
+        fgets(customer->dob, 50, stdin);
+        customer->dob[strcspn(customer->dob, "\n")] = '\0';
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------//
@@ -74,10 +73,10 @@ void addAccount() {
     customer->gender[strcspn(customer->gender, "\n")] = '\0';
 
     // Validate Gender
-    if (customer->gender[0] == '\0' || !validateGender(customer->gender)) {
-        printf("Invalid gender. Please enter 'male' or 'female'.\n");
-        free(customer);
-        return;
+    while (customer->gender[0] == '\0' || !validateGender(customer->gender)) {
+        printf("Invalid gender.\nPlease enter [male] or [female]: ");
+        fgets(customer->gender, 50, stdin);
+        customer->gender[strcspn(customer->gender, "\n")] = '\0';
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------//
@@ -105,28 +104,41 @@ void addAccount() {
     customer->panCardNo[strcspn(customer->panCardNo, "\n")] = '\0';
 
     // Validate PAN CARD
-    if (customer->panCardNo[0] == '\0' || !validatePanCard(customer->panCardNo)) {
-        printf("Invalid PAN Card No.\n%s", customer->panCardNo);
-        free(customer);
-        return;
+    while (customer->panCardNo[0] == '\0' || !validatePanCard(customer->panCardNo)) {
+        printf("Invalid PAN Card No. | %s.\nEnter a valid PAN Card Number: ", customer->panCardNo);
+        fgets(customer->panCardNo, 11, stdin);
+        customer->panCardNo[strcspn(customer->panCardNo, "\n")] = '\0';
     }
-
+    
 //-----------------------------------------------------------------------------------------------------------------------------------//
 
 //---------------------------------------------------------------LANDLINE NUMBER---------------------------------------------------------------//
 
     printf("Enter Landline: ");
-    clearInputBuffer();
-    fgets(customer->landline, 50, stdin);
+    fgets(customer->landline, 11, stdin);
     customer->landline[strcspn(customer->landline, "\n")] = '\0';
+
+    // Validate Landline Number
+    while (customer->landline[0] == '\0' || !validateInteger(customer->landline)) {
+        printf("Landline Number is invalid or contains non-numeric characters.\nPlease enter a valid landline number: ");
+        fgets(customer->landline, sizeof(customer->landline), stdin);
+        customer->landline[strcspn(customer->landline, "\n")] = '\0';
+    }
 
 //-----------------------------------------------------------------------------------------------------------------------------------//
 
 //---------------------------------------------------------------MOBILE NUMBER---------------------------------------------------------------//
 
-    printf("Enter Mobile: ");
-    fgets(customer->mobile, 50, stdin);
+    printf("Enter Mobile Number: ");
+    fgets(customer->mobile, 11, stdin);
     customer->mobile[strcspn(customer->mobile, "\n")] = '\0';
+    
+    // Validate Monile Number
+    while (customer->mobile[0] == '\0' || !validateInteger(customer->mobile)) {
+        printf("Mobile Number is invalid or contains non-numeric characters.\nPlease enter a valid Mobile Number: ");
+        fgets(customer->mobile, sizeof(customer->mobile), stdin);
+        customer->mobile[strcspn(customer->mobile, "\n")] = '\0';
+    }
 
 //-----------------------------------------------------------------------------------------------------------------------------------//
 
@@ -149,10 +161,10 @@ void addAccount() {
     customer->accountType[strcspn(customer->accountType, "\n")] = '\0';
 
     // Validate Account Type
-    if (customer->accountType[0] == '\0' || !validateAccountType(customer->accountType)) {
-        printf("Invalid account type. Please enter 'salary' or 'savings' or 'current'.\n");
-        free(customer);
-        return;
+    while (customer->accountType[0] == '\0' || !validateAccountType(customer->accountType)) {
+        printf("Invalid account type.\nPlease enter [salary] or [savings] or [current]: ");
+        fgets(customer->accountType, 50, stdin);
+        customer->accountType[strcspn(customer->accountType, "\n")] = '\0';
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------//
@@ -192,16 +204,16 @@ void addAccount() {
                 customer->accountNumber, customer->customerNumber, customer->cardNumber, customer->pin, customer->chequebookNumber);
         fclose(file);
         printf("\nAccount Creation Successful!\n");
-        printf("Account Number: %u\n", customer->accountNumber);
-        printf("Customer Number: %u\n", customer->customerNumber);
-        printf("Card Number: %llu\n", customer->cardNumber);
+        printf("Account Number:    | %u\n", customer->accountNumber);
+        printf("Customer Number:   | %u\n", customer->customerNumber);
+        printf("Card Number:       | %llu\n", customer->cardNumber);
         //printf("PIN: %u\n", customer->pin);
         if (customer->hasCheckBook) {
-            printf("Chequebook Number: %u\n", customer->chequebookNumber);
+            printf("Chequebook Number: | %u\n", customer->chequebookNumber);
             printf("\nCheck Book Added Successfully!\n");
         }
     } else {
-        printf("Failed to open Customers.csv for writing.\n");
+        printf("Failed to opem file.\n");
     }
 
     // Free allocated memory

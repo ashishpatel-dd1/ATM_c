@@ -103,9 +103,9 @@ void deleteATM() {
         if (found) {
             // Replace the original ATMs.csv file with temp file
             if (remove(ATM_DETAILS_FILENAME) == 0 && rename(ATM_DETAILS_TEMP_FILE, ATM_DETAILS_FILENAME) == 0) {
-                printf("ATM details deleted from ATMs.csv and moved to DeletedATMs.csv\n");
+                printf("ATM details deleted successfully\n");
             } else {
-                printf("Failed to delete ATM details from ATMs.csv.\n");
+                printf("Failed to delete ATM details\n");
             }
         } else {
             printf("ATM ID not found.\n");

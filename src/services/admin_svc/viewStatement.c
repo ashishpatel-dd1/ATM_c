@@ -2,41 +2,42 @@ void generateStatement(struct Admin* admin) {
 
     STATEMENT statement;
 
-    FILE* fp1 = fopen(STATEMENTS_FILE, "r");
+    FILE* statementFile = fopen(STATEMENTS_FILE, "r");
 
     char acctNum[20];
     int found=0;
     printf("Enter the ACCOUNT NUMBER you want to get transaction Details : ");
     scanf("%s",acctNum);
 
+    char startDate[11];
+    char endDate[11];
+    printf("Enter the start date (DD/MM/YYYY): ");
+    scanf("%s", startDate);
+    printf("Enter the end date (DD/MM/YYYY): ");
+    scanf("%s", endDate);
+
+    printf("\n=============================================== || ATM STATEMENT || =================================================\n");
+    printf("---------------------------------------------------------------------------------------------------------------------\n");
+    printf("   ACCOUNT NUMBER\tTRANSACTION DATE\tTRANSACTION ID\t\tTRANSACTION TYPE\tBALANCE \n");
+    printf("---------------------------------------------------------------------------------------------------------------------\n");
        
-    while(fscanf(fp1,"%[^,],%[^,],%u,%[^,],%lf\n" , statement.accountNumber, statement.date, &statement.transactionId, statement.transactionType, &statement.balance) != EOF)
-    {
-        //printf("ACCount NU  : %d\n",addAcc.accountno);
-        if(strcmp(acctNum, statement.accountNumber)==0)
-        {
-            found=1;
-            //printf("%d\t\t%s\t\t%s\t\t%s\t\t%s\t\t%s\t\t%.2lf\n",addAcc.accountno, addAcc.transactionDate, addAcc.name, addAcc.type,  addAcc.transactionId, addAcc.status, addAcc.balance);
+    while (fscanf(statementFile, "%[^,],%[^,],%u,%[^,],%lf\n", statement.accountNumber, statement.date, &statement.transactionId, statement.transactionType, &statement.balance) != EOF) {
+        int startDay, startMonth, startYear, endDay, endMonth, endYear, transDay, transMonth, transYear;
+        sscanf(startDate, "%d/%d/%d", &startDay, &startMonth, &startYear);
+        sscanf(endDate, "%d/%d/%d", &endDay, &endMonth, &endYear);
+        sscanf(statement.date, "%d/%d/%d", &transDay, &transMonth, &transYear);
+
+        if (strcmp(acctNum, statement.accountNumber) == 0 &&
+            (transYear > startYear || (transYear == startYear && (transMonth > startMonth || (transMonth == startMonth && transDay >= startDay)))) &&
+            (transYear < endYear || (transYear == endYear && (transMonth < endMonth || (transMonth == endMonth && transDay <= endDay))))
+        ) {
+            found = 1;
+            printf("     %-15s    %-15s  \t %u\t\t %-15s  \t%.2lf\n", statement.accountNumber, statement.date, statement.transactionId, statement.transactionType, statement.balance);
         }
     }
+    printf("---------------------------------------------------------------------------------------------------------------------\n");
 
-    fclose(fp1);
-    
-    FILE* statementFile = fopen(STATEMENTS_FILE, "r");
-
-    if (found == 1) {
-        printf("\n=============================================== || ATM STATEMENT || =================================================\n");
-        printf("---------------------------------------------------------------------------------------------------------------------\n");
-        printf("   ACCOUNT NUMBER\tTRANSACTION DATE\tTRANSACTION ID\t\tTRANSACTION TYPE\tBALANCE \n");
-        printf("---------------------------------------------------------------------------------------------------------------------\n");
-
-        while (fscanf(statementFile, "%[^,],%[^,],%u,%[^,],%lf\n", statement.accountNumber, statement.date, &statement.transactionId, statement.transactionType, &statement.balance) != EOF) {
-            if (strcmp(acctNum, statement.accountNumber) == 0) {
-                printf("     %-15s    %-15s  \t %u\t\t %-15s  \t%.2lf\n", statement.accountNumber, statement.date, statement.transactionId, statement.transactionType, statement.balance);
-            }
-        }
-        printf("---------------------------------------------------------------------------------------------------------------------\n");
-    }
+    fclose(statementFile);
 
 
     if(found == 0) {
@@ -54,7 +55,7 @@ void generateStatement(struct Admin* admin) {
 
         switch (choice) {
             case 1:
-                verifyAndClearCheck(admin);
+                generateStatement(admin);
                 break;
             case 2:
                 adminMenu(admin);
