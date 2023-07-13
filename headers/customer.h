@@ -37,7 +37,7 @@ typedef struct {
 
 typedef struct {
    char accountNumber[11];
-   char date[10];
+   char date[11];
    unsigned int transactionId;
    char transactionType[10];
    double balance; 
