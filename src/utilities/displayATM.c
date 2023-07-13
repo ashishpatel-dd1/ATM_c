@@ -21,11 +21,11 @@ void displayATM(const char* state, const char* city, const char* type) {
 
         // Check if the ATM matches the provided criteria
         if (strcmp(atmState, state) == 0 && strcmp(atmCity, city) == 0 && strcmp(atmType, type) == 0) {
-            printf("ATM ID:  %s\n", atmID);
-            printf("State:   %s\n", atmState);
-            printf("City:    %s\n", atmCity);
-            printf("Type:    %s\n", atmType);
-            printf("Address: %s\n", atmAddress);
+            printf("ATM ID:  | %s\n", atmID);
+            printf("State:   | %s\n", atmState);
+            printf("City:    | %s\n", atmCity);
+            printf("Type:    | %s\n", atmType);
+            printf("Address: | %s\n", atmAddress);
             printf("---------------------------\n");
             found = 1;  // At least one ATM is found
         }

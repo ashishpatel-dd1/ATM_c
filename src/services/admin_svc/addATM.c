@@ -14,14 +14,14 @@ void addATM() {
     printf("Enter State: ");
     clearInputBuffer();
     fgets(atm->state, sizeof(atm->state), stdin);
-    atm->state[strcspn(atm->state, "\n")] = '\0';  // Remove newline character
+    atm->state[strcspn(atm->state, "\n")] = '\0';
 
 
     // Validate State
-    if (atm->state[0] == '\0' || !validateAlphabetsOnly(atm->state)) {
-        printf("Invalid State. Please enter alphabets only.\n");
-        free(atm);
-        return;
+    while (atm->state[0] == '\0' || !validateAlphabetsOnly(atm->state)) {
+        printf("Invalid State.\nPlease enter a valid State: ");
+        fgets(atm->state, sizeof(atm->state), stdin);
+        atm->state[strcspn(atm->state, "\n")] = '\0';
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------//
@@ -29,16 +29,15 @@ void addATM() {
 //---------------------------------------------------------------CITY---------------------------------------------------------------//
     
     printf("Enter City: ");
-    // clearInputBuffer();
     fgets(atm->city, sizeof(atm->city), stdin);
-    atm->city[strcspn(atm->city, "\n")] = '\0';  // Remove newline character
+    atm->city[strcspn(atm->city, "\n")] = '\0';
 
 
     // Validate City
-    if (atm->city[0] == '\0' || !validateAlphabetsOnly(atm->city)) {
-        printf("Invalid City. Please enter alphabets only.\n");
-        free(atm);
-        return;
+    while (atm->city[0] == '\0' || !validateAlphabetsOnly(atm->city)) {
+        printf("Invalid City.\nPlease enter a valid City: ");
+        fgets(atm->city, sizeof(atm->city), stdin);
+        atm->city[strcspn(atm->city, "\n")] = '\0';
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------//
@@ -46,16 +45,15 @@ void addATM() {
 //---------------------------------------------------------------ATM TYPE---------------------------------------------------------------//
 
     printf("Enter Type (Urban or Rural): ");
-    // clearInputBuffer();
     fgets(atm->type, sizeof(atm->type), stdin);
-    atm->type[strcspn(atm->type, "\n")] = '\0';  // Remove newline character
+    atm->type[strcspn(atm->type, "\n")] = '\0';
 
 
     // Validate Type
-    if (strcmp(atm->type, "Urban") != 0 && strcmp(atm->type, "Rural") != 0) {
-        printf("Invalid Type. Please enter either Urban or Rural.\n");
-        free(atm);
-        return;
+    while (strcmp(atm->type, "Urban") != 0 && strcmp(atm->type, "Rural") != 0) {
+        printf("Invalid Type. Please enter either [Urban] or [Rural]: \n");
+        fgets(atm->type, sizeof(atm->type), stdin);
+        atm->type[strcspn(atm->type, "\n")] = '\0';
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------//
@@ -63,41 +61,47 @@ void addATM() {
 //---------------------------------------------------------------ADDRESS---------------------------------------------------------------//
 
     printf("Enter Address: ");
-    // clearInputBuffer();
     fgets(atm->address, sizeof(atm->address), stdin);
-    atm->address[strcspn(atm->address, "\n")] = '\0';  // Remove newline character
+    atm->address[strcspn(atm->address, "\n")] = '\0';
 
     // Validate Address
-    if (atm->address[0] == '\0') {
-        printf("Address cannot be empty.\n");
-        free(atm);
-        return;
+    while (atm->address[0] == '\0') {
+        printf("Address cannot be empty: ");
+        fgets(atm->address, sizeof(atm->address), stdin);
+        atm->address[strcspn(atm->address, "\n")] = '\0';
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------//
-//-----------------------------------------------------------------------------------------------------------------------------------//
 
-    
-    // All validations passed
-    printf("ATM details captured successfully!\n");
-
-    printf("------------------------------------\n");
-
+//---------------------------------------------------------------ATM-ID---------------------------------------------------------------//
+   
     // Generate ATM ID
     char bankName[MAX_BANK_NAME_LENGTH];
     printf("Enter Bank Name: ");
     fgets(bankName, sizeof(bankName), stdin);
-    bankName[strcspn(bankName, "\n")] = '\0';  // Remove newline character
+    bankName[strcspn(bankName, "\n")] = '\0';
     //printf("%s", bankName);
 
-    // Extract first character from each word of bank name
+    
     char* token = strtok(bankName, " ");
     char bankID[10] = "";
     while (token != NULL) {
         strncat(bankID, &token[0], 1);
         token = strtok(NULL, " ");
     }
-    int atmCount = 2; 
+
+//-----------------------------------------------------------------------------------------------------------------------------------//
+
+//---------------------------------------------------------------ATM COUNT---------------------------------------------------------------//
+    
+    srand(time(NULL));  // Seed the random number generator
+    int atmCount = rand() % 90 + 10;  // Generate a random number between 10 and 99
+
+//-----------------------------------------------------------------------------------------------------------------------------------//
+
+    // All validations passed
+    printf("ATM details captured successfully!\n");
+    printf("------------------------------------\n");
 
     // Generate ATM ID
     char atmID[50];
@@ -116,9 +120,9 @@ void addATM() {
         }
         fprintf(file, "%s,%s,%s,%s,%s\n", atmID, atm->state, atm->city, atm->type, atm->address);
         fclose(file);
-        printf("ATM details written to ATMs.csv\n");
+        //printf("ATM details written to ATMs.csv\n");
     } else {
-        printf("Failed to open ATMs.csv for writing.\n");
+        printf("Failed to open file for writing.\n");
     }
 
     printf("-------------------------------\n");
